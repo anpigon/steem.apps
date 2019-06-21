@@ -392,7 +392,7 @@
         </div>
       </div>
       <div class="modal-body" v-html="data.post.html"></div>
-      <div><span v-for="(tag, index) in (data.post.tags || [])" v-bind:key="index">#{{ tag }} </span></div>
+      <!-- <div><span v-for="(tag, index) in (data.post.tags || [])" v-bind:key="index">#{{ tag }} </span></div> -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" v-on:click="closePostModal" data-dismiss="modal">Close</button>
       </div>
