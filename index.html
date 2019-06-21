@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="ko">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-store" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+
+<link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="/img/favicons/favicon-57.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/img/favicons/favicon-114.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/img/favicons/favicon-72.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/favicons/favicon-144.png" type="image/png">
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="/img/favicons/favicon-60.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/img/favicons/favicon-120.png" type="image/png">
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="/img/favicons/favicon-76.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/img/favicons/favicon-152.png" type="image/png">
+<link rel="icon" type="image/png" href="/img/favicons/favicon-196.png" sizes="196x196">
+<link rel="icon" type="image/png" href="/img/favicons/favicon-96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/img/favicons/favicon-32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/img/favicons/favicon-16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/img/favicons/favicon-128.png" sizes="128x128">
+<meta name="msapplication-TileColor" content="#FFFFFF">
+<meta name="msapplication-TileImage" content="/img/favicons/favicon-144.png">
+<meta name="msapplication-square70x70logo" content="/img/favicons/favicon-70.png">
+<meta name="msapplication-square150x150logo" content="/img/favicons/favicon-150.png">
+<meta name="msapplication-square310x310logo" content="/img/favicons/favicon-310.png">
+
+<title>Steem Apps</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script-->
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.css" />
+<link rel="stylesheet" href="./css/bootstrap_my.css">
+
+<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" >	</script-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/http-vue-loader/src/httpVueLoader.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.slim.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.4.0/marked.min.js" integrity="sha256-JaznSM5IwXQK1AyjtxCTklRL05ar/8zo+oty8fS+AMc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js" integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autolinker/1.6.2/Autolinker.min.js" integrity="sha256-xM7yXMX5B/Fo0V/Z8EJzzawX4BRlSLi7CUEO3Gz7i8s=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.waitforimages/2.4.0/jquery.waitforimages.min.js" integrity="sha256-CwlQTm2skjExaYac03IIyHmgqDi0XNaEgmTiemZC668=" crossorigin="anonymous"></script>
+<script src="./js/Chart.PieceLabel.min.js"></script>
+<script src="./js/util.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109501118-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-109501118-1');
+</script>
+<style>
+	a {
+		cursor : hand;
+	}
+	.logo1{
+		color:#06d6a9 !important;font-weight:bold;
+	}
+	.logo2{
+		color:#69A9EC !important;font-weight:bold;
+	}
+	.logo3{
+		color:#FF94B0 !important;font-weight:bold;
+	}
+	.input-group-addon.primary {
+	  color: rgb(255, 255, 255);
+	  background-color: rgb(50, 118, 177);
+	  border-color: rgb(40, 94, 142);
+	}
+	.input-group-addon.success {
+	  color: rgb(255, 255, 255);
+	  background-color: rgb(92, 184, 92);
+	  border-color: rgb(76, 174, 76);
+	}
+	.input-group-addon.info {
+	  color: rgb(255, 255, 255);
+	  background-color: rgb(57, 179, 215);
+	  border-color: rgb(38, 154, 188);
+	}
+	.input-group-addon.warning {
+	  color: rgb(255, 255, 255);
+	  background-color: rgb(240, 173, 78);
+	  border-color: rgb(238, 162, 54);
+	}
+	.input-group-addon.danger {
+	  color: rgb(255, 255, 255);
+	  background-color: rgb(217, 83, 79);
+	  border-color: rgb(212, 63, 58);
+	}
+	.input-group-addon.white {
+	  color: black;
+	  background-color: white;
+	  border-color: white;
+	}
+	@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css); .notosanskr * { font-family: 'Noto Sans KR', sans-serif; }
+	body{
+		font-family: 'Noto Sans KR';
+	}
+</style>
+
+</head>
+<body style="padding-top: 5em;">
+
+<div id="app">
+	<nav id="nav" class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button id="navButton" type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand " href="#">
+					<span><img width="36px" height="36px" v-bind:src="img_src"></span>
+					<span id="logo">Steem Apps</span>
+				</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active" name="Home" id="Home"><a href="#Home"><i class="text-info glyphicon glyphicon-home"></i> Home</a></li>
+					<li name="VotingStat" id="VotingStat"><a href="#VotingStat"><i class="text-info glyphicon glyphicon-stats"></i> Voting Stat</a></li>
+					<li name="AppCenter" id="AppCenter"><a href="#AppCenter"><i class="text-info glyphicon glyphicon-th"></i> App Center</a></li>
+					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
+					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator"><i class="text-info glyphicon glyphicon-user"></i> Account Creator</a></li>
+					<li name="TickerUpbit" id="TickerUpbit"><a href="#TickerUpbit"><i class="text-info glyphicon glyphicon-bitcoin"></i> Ticker(Upbit)</a></li>
+
+					<!--li name="RecoveryMana" id="RecoveryMana"><a href="#RecoveryMana"><i class="text-info glyphicon glyphicon-bitcoin"></i> RecoveryMana</a></li-->
+
+					<li class="dropdown" id="dropdown_family"><a class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false"><i class="text-info glyphicon glyphicon-link"></i> Family Site <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="http://tool.steem.world" target="_blank">STEEM TOOL - @segyepark</a></li>
+							<li><a href="https://steempay.co/"
+								target="_blank">Steem Pay - @asbear</a></li>
+							<li><a href="https://ianpark.github.io/steeme/"
+								target="_blank">Steeme - @asbear</a></li>
+							<li><a href="https://steemus.com" target="_blank">Steem Us - @jungs</a></li>
+							<li><a href="https://asinayo.github.io/jobsteem/" target="_blank">jobsteem - @asinayo</a></li>
+							<li><a href="http://cobot.co.kr" target="_blank">cobot - All Coin Ticker @nhj12311</a></li>
+							<li><a href="./test/test_upbit.html" target="_blank">upbit simple ticker @nhj12311</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Steem Platform</li>
+							<li><a href="https://steemkr.com/created/kr" target="_blank">steemkr</a></li>
+							<li><a href="https://steemit.com/created/kr" target="_blank">steemit</a></li>
+							<li><a href="https://busy.org/created/kr" target="_blank">Busy</a></li>
+							<li><a href="https://utopian.io" target="_blank">Utopian-io</a></li>
+
+						</ul></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right hidden">
+					<li><a href="../navbar/">Default</a></li>
+					<li><a href="../navbar-static-top/">Static top</a></li>
+					<li class="active"><a href="./">Fixed top <span
+							class="sr-only">(current)</span></a></li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+
+	<template>
+		<div>
+		<!-- 여기에 라우터가 컴포넌트를 그린다 -->
+			<router-view></router-view>
+		</div>
+	</template>
+
+	<div class="container theme-showcase">
+		<component :is="currentView"></component>
+		<br /><br />
+		created by <a :href="mySteemitBlog" target="_blank">{{myAccount}}</a>
+		<br /><br />
+		<button id="toggleBarBtn" type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#flipFlop" data-backdrop="static">
+		  Toggle Progress Bar
+		</button>
+
+		  <!-- The modal -->
+		  <div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		    <div class="modal-dialog" role="document">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		            <span aria-hidden="true">&times;</span>
+		          </button-->
+		          <h4 class="modal-title" id="modalLabel">Wait For Processing...</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div class="progress" >
+		            <div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+		          </div>
+		        </div>
+		        <!--div class="modal-footer">
+		          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        </div-->
+		      </div>
+		    </div>
+		  </div>
+
+		</div>
+	</div>
+
+</div>
+	<script>
+		// ECMAScript 5 polyfill
+		Object.defineProperty(Array.prototype, 'stableSort', {
+			configurable: true,
+			writable: true,
+			value: function stableSort (compareFunction) {
+				'use strict'
+
+				var length = this.length
+				var entries = Array(length)
+				var index
+
+				// wrap values with initial indices
+				for (index = 0; index < length; index++) {
+					entries[index] = [index, this[index]]
+				}
+
+				// sort with fallback based on initial indices
+				entries.sort(function (a, b) {
+					var comparison = Number(this(a[1], b[1]))
+					return comparison || a[0] - b[0]
+				}.bind(compareFunction))
+
+				// re-map original array to stable sorted values
+				for (index = 0; index < length; index++) {
+					this[index] = entries[index][1]
+				}
+				return this;
+			}
+		});
+
+		if (typeof JSON.clone !== "function") {
+		    JSON.clone = function(obj) {
+		        return JSON.parse(JSON.stringify(obj));
+		    };
+		}
+		//$(".nav a").attr("href",'javascript:setToggle(this);');
+
+		function setToggle(obj){
+			//console.error( $(".nav").find(".active").length );
+			$(".nav").find(".active").toggleClass("active");
+			//$('.navbar-collapse').collapse('hide');
+			//console.log(obj);
+			$(obj).toggleClass("active");
+			if( $("#navButton").is(':visible') ){
+				$("#navButton").click();
+			}
+		}
+		const Home = { template: '<div>Home</div>'}
+		var router = new VueRouter({
+		    mode: 'history',
+		    routes: [
+					{ path : '/', component : Home }
+					, { path : '/Home', component : Home }
+					, { path : '/AppCenter', component : AppCenter }
+				]
+		});
+		Vue.use(router);
+
+		var routes = {
+		  '/': 'Home',
+		  '/about': 'About'
+		}
+
+		var updateVersion = "2018.09.28.01";
+
+
+		function loadVue(path){
+			//gtag('page', {page:path, title:'', location:path});
+			//gtag('config', 'UA-109501118-1');
+			return httpVueLoader('./vue/'+path + '.vue?v='+updateVersion);
+		}
+		var app = new Vue({
+			router
+			, 'el' : '#app'
+			, data:{
+				currentView : ''
+				,myAccount : '@nhj12311'
+				, mySteemitBlog : 'https://steemit.com/@nhj12311'
+				, img_src : './asset/img/new_steem_apps_sm_1.png'
+				, currentRoute: window.location.pathname
+			}
+
+			, components : {
+				'AccountCreator' : loadVue('./AccountCreator')
+				, 'AppCenter' : loadVue('./AppCenter')
+				, 'RemindYou' : loadVue('./RemindYou')
+				, 'Home' : loadVue('./Home')
+				, 'VotingStat' : loadVue('./VotingStat')
+				, 'TickerUpbit' : loadVue('./TickerUpbit')
+				, 'RecoveryMana' : loadVue('./RecoveryMana')
+			}
+			, methods : {
+				setCurrentView : function(li){
+					var name = $(li).attr('name');
+					if(!name) return;
+
+					app.currentView = name.trim();
+					gtag('config', 'UA-109501118-1', {'page_path': name });
+					setToggle( li );
+				}
+			}
+			, created() {
+				var rani = Math.floor(Math.random() * 3 + 1) ;
+				this.$data.img_src = "./asset/img/new_steem_apps_sm_" + rani + ".png";
+			  $("#logo").addClass("logo" + rani);
+				//console.error($("#logo").text());
+
+			}
+			, mounted: function () {
+				steem.api.setOptions({url: 'https://api.steemit.com'});
+				//steem.api.setOptions({url: 'https://api.steemitstage.com/'});
+
+				console.log(this.$route) // outputs 'yay'
+				if( this.$route.hash != "" ){
+					var vueName = this.$route.hash.substring(1);
+					this.$data.currentView = vueName;
+					$(".nav").find(".active").toggleClass("active");
+					$("#"+vueName).toggleClass("active");
+				}else{
+					this.$data.currentView = "Home";
+				}
+				$("#navbar").children().first().children().each(
+					function(idx, val){
+						//console.log(idx, val);
+						$(val).on("click",
+							function(){
+								app.setCurrentView(val);
+							}
+						);
+					}
+				);
+
+				$("#dropdown_family").on('touchmove touchend', function(event){
+					event.stopPropagation();
+				});
+				$(document).on('touchmove touchend', function(event) {
+					if( "dropdown_family" == event.target.id) return;
+					if( "true"==$("#navButton").attr('aria-expanded') ){
+						$("#navButton").click();
+					}
+				});
+
+		 } // end mounted
+
+		});
+
+		window.addEventListener('popstate', () => {
+		  app.currentRoute = window.location.pathname
+		})
+
+
+	/**
+	 * Module for displaying "Waiting for..." dialog using Bootstrap
+	 * @author Eugene Maslovich <ehpc@em42.ru>
+	 */
+
+	var waitingDialog = waitingDialog || (function ($) {
+	    'use strict';
+
+		// Creating modal dialog's DOM
+		var $dialog = $(
+			'<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+			'<div class="modal-dialog modal-m">' +
+			'<div class="modal-content">' +
+				'<div class="modal-header"><h4 style="margin:0;"></h4></div>' +
+				'<div class="modal-body">' +
+					'<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+				'</div>' +
+			'</div></div></div>');
+
+		return {
+			/**
+			 * Opens our dialog
+			 * @param message Custom message
+			 * @param options Custom options:
+			 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+			 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+			 */
+			show: function (message, options) {
+				// Assigning defaults
+				if (typeof options === 'undefined') {
+					options = {};
+				}
+				if (typeof message === 'undefined') {
+					message = 'Loading';
+				}
+				var settings = $.extend({
+					dialogSize: 'm',
+					progressType: '',
+					onHide: null // This callback runs after the dialog was hidden
+				}, options);
+
+				// Configuring dialog
+				$dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+				$dialog.find('.progress-bar').attr('class', 'progress-bar');
+				if (settings.progressType) {
+					$dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+				}
+				$dialog.find('h4').text(message);
+				// Adding callbacks
+				if (typeof settings.onHide === 'function') {
+					$dialog.off('hidden.bs.modal').on('hidden.bs.modal', function (e) {
+						settings.onHide.call($dialog);
+					});
+				}
+				// Opening dialog
+				$dialog.modal();
+			},
+			/**
+			 * Closes dialog
+			 */
+			hide: function () {
+				$dialog.modal('hide');
+			}
+		};
+
+	})(jQuery);
+
+	</script>
+
+
+	<script>
+
+		//window.WebSocket = window.WebSocket || window.MozWebSocket;
+		console.log("location.hostname : "+location.hostname);
+		var ws_protocol = location.protocol=="http:"?"ws:":"wss:";
+		var hostname = location.hostname=="localhost" ? "localhost" : "steemalls.com";
+		var port = location.hostname=="localhost" ? ":8088" : "";
+		let socket_io_addr = location.protocol + "//" + hostname + port;
+		let ws_addr =  ws_protocol + "//"+hostname+port;
+		//ws_addr = "wss://steemalls.com/";
+		//console.error("ws_addr : " + ws_addr);
+		var websocket;
+		function initWebSocket(){
+			websocket = new WebSocket(ws_addr);
+			websocket.onopen = function () {
+				// connection is opened and ready to use
+				console.log("WebSocket onopen");
+				console.log(websocket);
+				console.log(websocket.OPEN);
+			};
+			websocket.onerror = function (error) {
+				console.log("WebSocket onerror");
+				//setTimeout(function(){ initWebSocket(); }, 250);
+				// an error occurred when sending/receiving data
+			};
+			websocket.onclose = function (error) {
+				console.log("WebSocket onclose");
+				setTimeout(function(){ initWebSocket(); }, 500);
+				// an error occurred when sending/receiving data
+			};
+			websocket.onmessage = function (message) {
+				console.log("WebSocket onmessage");
+				console.log(message);
+				// try to decode json (I assume that each message
+				// from server is json)
+				try {
+					console.log( typeof message.data);
+					var json = JSON.parse(message.data);
+					callback(json);
+					//console.log(json);
+				} catch (e) {
+					console.error(e);
+					console.log('This doesn\'t look like a valid JSON: ', message.data);
+					return;
+				}
+				// handle incoming message
+			};
+		}
+
+		//initWebSocket();
+
+		var callback;
+		function requestWS( json, cb ){
+			callback = cb;
+			if( websocket.readyState == WebSocket.CLOSED ){
+				console.error("소켓서버와 연결 끊김.");
+				setTimeout(function(){ initWebSocket(); }, 500);
+				alert("서버와의 연결이 원활하지 않습니다. 잠시 후에 다시 시도해보시기 바랍니다.");
+				return false;
+			}
+			websocket.send( JSON.stringify(json) );
+			return true;
+		}
+	</script>
+
+	<script>
+	console.log("socket_io_addr : "+socket_io_addr);
+
+	function initSocket(){
+		socket = io.connect( socket_io_addr );
+		socket.on( 'io.res', function( json ) {
+			console.log("io.res", json);
+			if( json.err ){
+				waitingDialog.hide();
+				alert(json.err);
+				return;
+			}
+			callback(json);
+		});
+	}
+
+	var socket;
+	if( location.protocol =="https:" ){
+		//initSocket();
+	}else{
+
+	}
+
+	var callback;
+	function requestIO( json, cb ){
+		callback = cb;
+		if( socket ){
+				socket.emit('proxy', json );
+		}else{
+			return false;
+		}
+		return true;
+	}
+	</script>
+
+</body>
+</html>
