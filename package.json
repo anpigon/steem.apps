@@ -1,0 +1,32 @@
+{
+  "name": "steem.apps",
+  "version": "1.0.0",
+  "description": "First, steem.apps is being developed.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "srart": "node server.js",
+    "dev": "./node_modules/.bin/nodemon --watch steem.apps erver.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "./node_modules/.bin/gh-pages -d steem.apps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anpigon/nhj7.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anpigon/nhj7.github.io/issues"
+  },
+  "homepage": "https://github.com/anpigon/nhj7.github.io#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1",
+    "gh-pages": "^2.0.1"
+  }
+}

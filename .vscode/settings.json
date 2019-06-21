@@ -1,0 +1,15 @@
+{
+  "workbench.colorTheme": "Material Theme",
+  "editor.minimap.enabled": false,
+  "editor.tabSize": 2,
+  "terminal.integrated.shell.osx": "/bin/zsh",
+  "terminal.integrated.fontFamily": "'Meslo LG M for Powerline'",
+  "workbench.iconTheme": "material-icon-theme",
+  "window.zoomLevel": 1,
+  "search.showLineNumbers": true,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "eslint.autoFixOnSave": false,
+  "editor.formatOnSave": false,
+  "javascript.format.enable": false,
+  "terminal.integrated.rendererType": "dom"
+}
