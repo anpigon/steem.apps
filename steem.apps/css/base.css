@@ -7,6 +7,9 @@ body{
 a {
   cursor : hand;
 }
+.steemit-logo{
+  color:#028523 !important;font-weight:bold;
+}
 .logo1{
   color:#06d6a9 !important;font-weight:bold;
 }
