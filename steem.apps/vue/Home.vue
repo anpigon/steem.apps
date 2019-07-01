@@ -6,19 +6,18 @@
       <div class="col-sm-6 col-sm-offset-2">
         <div class="input-group">
           <span class="input-group-addon info">
-            <!--i class="glyphicon glyphicon-user"></i-->
+            <!--/i class="glyphicon glyphicon-user"></i-->
             @
           </span>
-          <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="homeSubmit" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name ex)nhj12311">
+          <input type="text" class="form-control" data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="homeSubmit" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name ex)nhj12311">
           <span class="input-group-btn">
             <button type="submit" class="btn btn-info " v-on:click="homeSubmit">Submit</button>
           </span>
           <span class="input-group-addon">
             <a v-on:click='data.is_toggle_acct_info = !data.is_toggle_acct_info' id="toggle_acct_info" href="#acct_info" data-toggle="collapse">
-              <span v-show="!data.is_toggle_acct_info">hidden details</span>
-          <span v-show="data.is_toggle_acct_info">show details</span>
-          </a>
-
+              <span v-show="!data.is_toggle_acct_info">hidden <i class="glyphicon glyphicon-menu-up"></i></span>
+              <span v-show="data.is_toggle_acct_info">show <i class="glyphicon glyphicon-menu-down"></i></span>
+            </a>
           </span>
         </div>
       </div>
@@ -404,7 +403,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal : 포스트 상세 -->
 <div id="postModal" class="modal fade padding-xs" role="dialog">
   <div class="modal-dialog modal-lg margin-zero center">
 
@@ -419,9 +418,8 @@
           </div>
         </div>
       </div>
-      <div class="modal-body" v-html="data.post.html">
-
-      </div>
+      <div class="modal-body" v-html="data.post.html"></div>
+      <div><span v-for="(tag, index) in (data.post.tags || [])" v-bind:key="index">#{{ tag }} </span></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" v-on:click="closePostModal" data-dismiss="modal">Close</button>
       </div>
@@ -1252,8 +1250,10 @@ function getExternalApi(url, fromNames, toNames) {
   });
 }
 
+// 상세보기
 function viewPost(item) {
-  console.log(item);
+  // console.log(item);
+  item.tags = item.metadata.tags || [];
   data.post = item;
   app.$nextTick(function() {
     $("#tab_modal_post_spinner").removeClass("hidden");
