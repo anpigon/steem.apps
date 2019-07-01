@@ -250,7 +250,7 @@
               <tbody>
                 <tr v-for="(item, idx) in data.postList" :key="item.id" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
                   <td class="text-left padding-xs">
-                    <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0">
+                    <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0" style="max-height: 120px; overflow: hidden">
                       <img class="col-xs-12 padding-xs" :src="`${item.images[1]}`" alt="door">
                     </div>
                     <div class="col-md-2 padding-xs text-center text-middle" v-else>
@@ -265,14 +265,29 @@
                       </div>
                       <div>
                         <ul class='tags'>
-                          <li v-for="tag in item.metadata.tags">
-                            <span class="label label-default">{{tag}}</span>
+                          <li v-for="(tag, i) in item.metadata.tags">
+                            <span v-if="item.scotPayout && item.scotPayout[tag.toUpperCase()]" class="label label-primary">{{tag}}</span>
+                            <span v-else class="label label-default">{{tag}}</span>
+                            <!-- <span v-else v-bind:class="['label', i === 0 ? 'label-primary' : 'label-default']">{{tag}}</span> -->
                           </li>
                         </ul>
                       </div>
                       <div>
-                        <i class="text-warning glyphicon glyphicon-upload"></i> $ {{item.payout_val}} <i class="margin-left-md margin-right-md">|</i>
-                        <i class="text-warning glyphicon glyphicon-chevron-up"></i> {{item.active_votes.length}} <i class="margin-left-md margin-right-md">|</i>
+                        <i class="text-warning glyphicon glyphicon-upload"></i> 
+                        <span>$ {{item.payout_val}}</span>
+
+                        <span v-if="item.scotPayout" v-for="(scot, i) in Object.values(item.scotPayout)" >
+                            ·<span v-if="scot.pending_token" v-bind:title="`Cashout: ${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
+                              {{ (scot.pending_token) / Math.pow(10, scot.precision) }} {{ scot.token }}
+                            </span>
+                            <span v-else v-bind:title="`Author: ${((scot.total_payout_value) - scot.curator_payout_value - scot.beneficiaries_payout_value) / Math.pow(10, scot.precision)} ${scot.token}\nCurator: ${scot.curator_payout_value / Math.pow(10, scot.precision)} ${scot.token}\nBeneficiaries: ${scot.beneficiaries_payout_value / Math.pow(10, scot.precision)} ${scot.token}`">
+                              {{ (scot.total_payout_value) / Math.pow(10, scot.precision) }} {{ scot.token }}
+                            </span>
+                        </span>
+
+                        <i class="margin-left-md margin-right-md">|</i>
+                        <i class="text-warning glyphicon glyphicon-chevron-up"></i> {{item.active_votes.length}} 
+                        <i class="margin-left-md margin-right-md">|</i>
                         <i class="text-warning glyphicon glyphicon-comment"></i> {{item.children}}
                       </div>
                     </div>
@@ -895,6 +910,7 @@ function setContentMore(obj) {
   //obj.html2 = marked(obj.body).replace(/\n/, "<br />");
   if (obj.json_metadata) {
     obj.metadata = JSON.parse(obj.json_metadata);
+    delete obj.json_metadata;
   }
   obj.html = converter.makeHtml(obj.body);
   obj.html = imageSetting(obj.html);
@@ -917,6 +933,7 @@ function setContentMore(obj) {
   return obj;
 }
 
+// 포스팅 리스트 더보기
 async function inqryPostMoreInfo() {
   var item;
   try {
@@ -928,6 +945,7 @@ async function inqryPostMoreInfo() {
     var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, data.postList[data.postList.length - 1].permlink, '2100-01-01T00:00:00', 100);
     for (var i = 1; i < result.length; i++) {
       item = result[i];
+      item.scotPayout = {};
       setContentMore(result[i]);
       data.postList.push(result[i]);
     }
@@ -937,6 +955,51 @@ async function inqryPostMoreInfo() {
   } finally {
     $("#tab_post_more_spinner").addClass("hidden");
   }
+}
+
+// 포스팅 리스트 조회
+async function inqryPostInfo() {
+  try {
+    if (!data.acct_nm) {
+      return;
+    }
+
+    $("#tab_post_spinner").removeClass("hidden");
+    $("#tab_post_table").addClass("hidden");
+
+    var author = data.acct_nm;
+    var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, null, '2100-01-01T00:00:00', 30);
+    
+    const reqScotPayouts = [];
+    for(item of result) {
+      const reqScotPayout = fetch(`https://scot-api.steem-engine.com/@${item.author}/${item.permlink}`).then(r => r.json());
+      reqScotPayouts.push(reqScotPayout);
+    }
+    // console.log('reqScotPayouts', reqScotPayouts);
+    const scotPayouts = await Promise.all(reqScotPayouts);
+    // console.log('scotPayouts', scotPayouts);
+
+    for (var i = 0; i < result.length; i++) {
+      const item = result[i];
+      item.scotPayout = scotPayouts[i];
+      setContentMore(item);
+      data.postList.push(item);
+    }
+
+    $("#tab_post_spinner").addClass("hidden");
+    $("#tab_post_table").removeClass("hidden");
+  } catch (err) {
+    console.error("inqryPostInfo", err);
+  } finally {
+
+  }
+}
+
+function parsePost(post) {
+  const jsonMetadata = JSON.parse(post.json_metadata || '{}');
+  post.jsonMetadata = jsonMetadata;
+  delete post.json_metadata
+  return post;
 }
 
 async function inqryFeedMoreInfo() {
@@ -1062,40 +1125,6 @@ async function inqryTagInfo(tag, glyphicon) {
   }
 }
 
-// 포스팅 조회
-async function inqryPostInfo() {
-  try {
-    if (!data.acct_nm) {
-      return;
-    }
-
-    $("#tab_post_spinner").removeClass("hidden");
-    $("#tab_post_table").addClass("hidden");
-
-    var author = data.acct_nm;
-    var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, null, '2100-01-01T00:00:00', 30);
-    for (var i = 0; i < result.length; i++) {
-      const item = result[i];
-      setContentMore(item);
-      data.postList.push(item);
-      // console.log('inqryPostInfo', item);
-
-    }
-    $("#tab_post_spinner").addClass("hidden");
-    $("#tab_post_table").removeClass("hidden");
-  } catch (err) {
-    console.error("inqryPostInfo", err);
-  } finally {
-
-  }
-}
-
-function parsePost(post) {
-  const jsonMetadata = JSON.parse(post.json_metadata || '{}');
-  post.jsonMetadata = jsonMetadata;
-  delete post.json_metadata
-  return post;
-}
 
 function inqryMuteInfo() {
   try {
