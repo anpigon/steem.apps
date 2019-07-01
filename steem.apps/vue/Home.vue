@@ -106,6 +106,11 @@
                   <i class="text-info glyphicon glyphicon-blackboard"></i> kr-dev
                 </a>
               </li>
+              <li v-on:click="inqryTagInfo('zzan', 'thumbs-up')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-thumbs-up"></i> zzan
+                </a>
+              </li>
               <li v-on:click="inqryTagInfo('sct', 'stats')">
                 <a href="#tab_feed" data-toggle="tab">
                   <i class="text-info glyphicon glyphicon-stats"></i> sct
@@ -257,6 +262,13 @@
                       </div>
                       <div class="margin-bottom-xs">
                         {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
+                      </div>
+                      <div>
+                        <ul class='tags'>
+                          <li v-for="tag in item.metadata.tags">
+                            <span class="label label-default">{{tag}}</span>
+                          </li>
+                        </ul>
                       </div>
                       <div>
                         <i class="text-warning glyphicon glyphicon-upload"></i> $ {{item.payout_val}} <i class="margin-left-md margin-right-md">|</i>
@@ -1063,8 +1075,11 @@ async function inqryPostInfo() {
     var author = data.acct_nm;
     var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, null, '2100-01-01T00:00:00', 30);
     for (var i = 0; i < result.length; i++) {
-      setContentMore(result[i]);
-      data.postList.push(result[i]);
+      const item = result[i];
+      setContentMore(item);
+      data.postList.push(item);
+      // console.log('inqryPostInfo', item);
+
     }
     $("#tab_post_spinner").addClass("hidden");
     $("#tab_post_table").removeClass("hidden");
@@ -1073,6 +1088,13 @@ async function inqryPostInfo() {
   } finally {
 
   }
+}
+
+function parsePost(post) {
+  const jsonMetadata = JSON.parse(post.json_metadata || '{}');
+  post.jsonMetadata = jsonMetadata;
+  delete post.json_metadata
+  return post;
 }
 
 function inqryMuteInfo() {

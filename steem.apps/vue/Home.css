@@ -463,3 +463,18 @@
   background-color: #a94442;
   /* active bg color */
 }
+
+ul.tags {
+  list-style: none;
+  margin: 10px 0;
+  padding: 0;
+}
+ul.tags li {
+  float: left;
+  margin-right: 5px;
+}
+ul.tags::after {
+  content: '';
+  display: block;
+  clear: both;
+}
