@@ -247,7 +247,7 @@
             <div id="tab_post_spinner" class="text-center"><i class="text-info glyphicon glyphicon-repeat fast-right-spinner"></i></div>
             <table id="tab_post_table" class="table table-hover text-center hidden">
               <tbody>
-                <tr v-for="(item, idx) in data.postList" :key="item.id" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
+                <tr v-for="(item, idx) in data.postList" :key="item.id" data-html="true" data-toggle="modal" data-target="#postModal">
                   <td class="text-left padding-xs">
                     <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0" style="max-height: 120px; overflow: hidden">
                       <img class="col-xs-12 padding-xs" :src="`${item.images[1]}`" alt="door">
@@ -257,15 +257,16 @@
                     </div>
                     <div class="col-md-9 padding-xs">
                       <div class="margin-bottom-xs">
-                        <a href="javascript:;"><b>{{ item.title }}</b></a>
+                        <a href="javascript:;" v-on:click="viewPost(item)" ><b>{{ item.title }}</b></a>
                       </div>
-                      <div class="margin-bottom-xs">
+                      <div class="margin-bottom-xs" v-on:click="viewPost(item)" >
                         {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
                       </div>
                       <div>
                         <ul class='tags'>
                           <li v-for="(tag, i) in item.metadata.tags">
                             <span v-if="item.scotPayout && item.scotPayout[tag.toUpperCase()]" class="label label-primary">{{tag}}</span>
+                            <span v-else-if="tag === 'palnet'" class="label label-primary">{{tag}}</span>
                             <span v-else class="label label-default">{{tag}}</span>
                             <!-- <span v-else v-bind:class="['label', i === 0 ? 'label-primary' : 'label-default']">{{tag}}</span> -->
                           </li>
@@ -273,13 +274,14 @@
                       </div>
                       <div>
                         <i class="text-warning glyphicon glyphicon-upload"></i> 
-                        <span>$ {{item.payout_val}}</span>
+                        <span v-if="item.pending_payout_value !== '0.000 SBD'" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(item.cashout_time + 'Z').toLocaleString()}`">$ {{item.payout_val}}</span>
+                        <span v-else data-toggle="tooltip" v-bind:title="`Author: ${item.total_payout_value}\nCurator: ${item.curator_payout_value}`">$ {{item.payout_val}}</span>
 
                         <span v-if="item.scotPayout" v-for="(scot, i) in Object.values(item.scotPayout)" >
-                            ·<span v-if="scot.pending_token" v-bind:title="`Cashout: ${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
+                            ·<span v-if="scot.pending_token" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
                               {{ (scot.pending_token) / Math.pow(10, scot.precision) }} {{ scot.token }}
                             </span>
-                            <span v-else v-bind:title="`Author: ${((scot.total_payout_value) - scot.curator_payout_value - scot.beneficiaries_payout_value) / Math.pow(10, scot.precision)} ${scot.token}\nCurator: ${scot.curator_payout_value / Math.pow(10, scot.precision)} ${scot.token}\nBeneficiaries: ${scot.beneficiaries_payout_value / Math.pow(10, scot.precision)} ${scot.token}`">
+                            <span v-else data-toggle="tooltip" v-bind:title="`Author: ${((scot.total_payout_value) - scot.curator_payout_value - scot.beneficiaries_payout_value) / Math.pow(10, scot.precision)} ${scot.token}\nCurator: ${scot.curator_payout_value / Math.pow(10, scot.precision)} ${scot.token}\nBeneficiaries: ${scot.beneficiaries_payout_value / Math.pow(10, scot.precision)} ${scot.token}`">
                               {{ (scot.total_payout_value) / Math.pow(10, scot.precision) }} {{ scot.token }}
                             </span>
                         </span>
