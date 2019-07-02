@@ -478,3 +478,26 @@ ul.tags::after {
   display: block;
   clear: both;
 }
+
+/* tooltip */
+[data-toggle="tooltip"] {
+  cursor: pointer;
+}
+[data-toggle="tooltip"]:hover {
+	position: relative;
+}
+[data-toggle="tooltip"]:hover:after {
+	content: attr(title);
+  position: absolute;
+	bottom: 100%;
+	left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+	color: #FFFFFF;
+	font-size: 12px;
+  z-index: 9999;
+  border-radius: 10px;
+  min-width: 170px;
+  padding: 10px;
+  white-space: pre;
+  display: inline-block;
+}
