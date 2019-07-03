@@ -247,49 +247,74 @@
             <div id="tab_post_spinner" class="text-center"><i class="text-info glyphicon glyphicon-repeat fast-right-spinner"></i></div>
             <table id="tab_post_table" class="table table-hover text-center hidden">
               <tbody>
-                <tr v-for="(item, idx) in data.postList" :key="item.id" data-html="true" data-toggle="modal" data-target="#postModal">
+                <tr 
+                  v-for="(item, idx) in data.postList" 
+                  :key="item.id" 
+                  __data-html="true" 
+                  __data-toggle="modal" 
+                  __data-target="#postModal">
                   <td class="text-left padding-xs">
-                    <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0" style="max-height: 120px; overflow: hidden">
-                      <img class="col-xs-12 padding-xs" :src="`${item.images[1]}`" alt="door">
+                    <div 
+                      class="__col-md-2 col-xs-2 padding-xs margin-bottom-xs" 
+                      v-if="item.images && item.images.length > 0" 
+                      style="max-height: 120px; overflow: hidden">
+                      <img class="__col-md-12 col-xs-12 padding-xs" :src="`${item.images[1]}`" alt="door">
                     </div>
-                    <div class="col-md-2 padding-xs text-center text-middle" v-else>
+                    <div class="__col-md-2 col-xs-2 padding-xs text-center text-middle" v-else>
                       no image
                     </div>
-                    <div class="col-md-9 padding-xs">
-                      <div class="margin-bottom-xs">
-                        <a href="javascript:;" v-on:click="viewPost(item)" ><b>{{ item.title }}</b></a>
+                    <div class="__col-md-9 col-xs-9 padding-xs">
+
+                      <div
+                        data-html="true" 
+                        data-toggle="modal" 
+                        data-target="#postModal">
+                        <div class="margin-bottom-xs">
+                          <a href="javascript:;" v-on:click="viewPost(item)"><b>{{ item.title }}</b></a>
+                        </div>
+                        <div class="margin-bottom-xs" v-on:click="viewPost(item)" >
+                          {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
+                        </div>
                       </div>
-                      <div class="margin-bottom-xs" v-on:click="viewPost(item)" >
-                        {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
-                      </div>
+
                       <div>
                         <ul class='tags'>
-                          <li v-for="(tag, i) in item.metadata.tags">
-                            <span v-if="item.scotPayout && item.scotPayout[tag.toUpperCase()]" class="label label-primary">{{tag}}</span>
-                            <span v-else-if="tag === 'palnet'" class="label label-primary">{{tag}}</span>
-                            <span v-else class="label label-default">{{tag}}</span>
+                          <li v-for="(tag, i) in item.metadata.tags" :key="`${tag}_${i}`">
+                            <span 
+                              v-if="item.scotPayout && item.scotPayout[tag.toUpperCase()]" 
+                              class="label label-primary">{{tag}}</span>
+                            <span 
+                              v-else-if="tag === 'palnet'" 
+                              class="label label-primary">{{tag}}</span>
+                            <span 
+                              v-else 
+                              class="label label-default">{{tag}}</span>
                             <!-- <span v-else v-bind:class="['label', i === 0 ? 'label-primary' : 'label-default']">{{tag}}</span> -->
                           </li>
                         </ul>
                       </div>
                       <div>
                         <i class="text-warning glyphicon glyphicon-upload"></i> 
-                        <span v-if="item.pending_payout_value !== '0.000 SBD'" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(item.cashout_time + 'Z').toLocaleString()}`">$ {{item.payout_val}}</span>
-                        <span v-else data-toggle="tooltip" v-bind:title="`Author: ${item.total_payout_value}\nCurator: ${item.curator_payout_value}`">$ {{item.payout_val}}</span>
 
-                        <span v-if="item.scotPayout" v-for="(scot, i) in Object.values(item.scotPayout)" >
-                            ·<span v-if="scot.pending_token" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
-                              {{ (scot.pending_token) / Math.pow(10, scot.precision) }} {{ scot.token }}
-                            </span>
-                            <span v-else data-toggle="tooltip" v-bind:title="`Author: ${((scot.total_payout_value) - scot.curator_payout_value - scot.beneficiaries_payout_value) / Math.pow(10, scot.precision)} ${scot.token}\nCurator: ${scot.curator_payout_value / Math.pow(10, scot.precision)} ${scot.token}\nBeneficiaries: ${scot.beneficiaries_payout_value / Math.pow(10, scot.precision)} ${scot.token}`">
-                              {{ (scot.total_payout_value) / Math.pow(10, scot.precision) }} {{ scot.token }}
-                            </span>
+                        <span class="payout__value" v-if="item.pending_payout_value !== '0.000 SBD'" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(item.cashout_time + 'Z').toLocaleString()}`">$ {{item.payout_val}}</span>
+                        <span class="payout__value" v-else data-toggle="tooltip" v-bind:title="`Author: ${item.total_payout_value}\nCurator: ${item.curator_payout_value}`">$ {{item.payout_val}}</span>
+
+                        <!-- 토큰 페이아웃 -->
+                        <span v-if="item.scotPayout">
+                          <span v-for="(scot, i) in Object.values(item.scotPayout)" :key="`${scot}_${i}`">
+                              <span class="payout__value" v-if="scot.pending_token" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
+                                {{ (scot.pending_token) / Math.pow(10, scot.precision) }} <span class='symbol'>{{ scot.token }}</span>
+                              </span>
+                              <span class="payout__value" v-else data-toggle="tooltip" v-bind:title="`Author: ${((scot.total_payout_value) - scot.curator_payout_value - scot.beneficiaries_payout_value) / Math.pow(10, scot.precision)} ${scot.token}\nCurator: ${scot.curator_payout_value / Math.pow(10, scot.precision)} ${scot.token}\nBeneficiaries: ${scot.beneficiaries_payout_value / Math.pow(10, scot.precision)} ${scot.token}`">
+                                {{ (scot.total_payout_value) / Math.pow(10, scot.precision) }} <span class='symbol'>{{ scot.token }}</span>
+                              </span>
+                          </span>
                         </span>
 
-                        <i class="margin-left-md margin-right-md">|</i>
-                        <i class="text-warning glyphicon glyphicon-chevron-up"></i> {{item.active_votes.length}} 
-                        <i class="margin-left-md margin-right-md">|</i>
-                        <i class="text-warning glyphicon glyphicon-comment"></i> {{item.children}}
+                        <!-- <i class="margin-left-md margin-right-md">|</i> -->
+                        &nbsp;<i class="text-warning glyphicon glyphicon-chevron-up"></i> {{item.active_votes.length}} 
+                        <!-- <i class="margin-left-md margin-right-md">|</i> -->
+                        &nbsp;<i class="text-warning glyphicon glyphicon-comment"></i> {{item.children}}
                       </div>
                     </div>
 
@@ -810,7 +835,7 @@ function replaceTagLink(html) {
     const space = /^\s/.test(tag) ? tag[0] : '';
     const tag2 = tag.trim().substring(1);
     const tagLower = tag2.toLowerCase();
-    console.log(tag);
+    // console.log(tag);
     //if (!true) return tag;
     return space + "<a href='https://steemit.com/created/" + tagLower + "'>" + tag + "</a>";
   });
