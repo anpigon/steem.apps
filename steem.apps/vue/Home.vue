@@ -958,51 +958,31 @@ function setContentMore(obj) {
   return obj;
 }
 
-// 포스팅 리스트 더보기
-async function inqryPostMoreInfo() {
-  var item;
-  try {
-    if (!data.acct_nm) {
-      return;
-    }
-    $("#tab_post_more_spinner").removeClass("hidden");
-    var author = data.acct_nm;
-    var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, data.postList[data.postList.length - 1].permlink, '2100-01-01T00:00:00', 100);
-    for (var i = 1; i < result.length; i++) {
-      item = result[i];
-      item.scotPayout = {};
-      setContentMore(result[i]);
-      data.postList.push(result[i]);
-    }
-    $("#tab_post_more_spinner").addClass("hidden");
-  } catch (err) {
-    console.error("inqryPostMoreInfo", item, err);
-  } finally {
-    $("#tab_post_more_spinner").addClass("hidden");
-  }
-}
-
 // 포스팅 리스트 조회
-async function inqryPostInfo() {
-  try {
-    if (!data.acct_nm) {
-      return;
-    }
+async function inqryPostInfo(next=null) {
+  
+  if (!data.acct_nm) {
+    return;
+  }
 
+  if(next) {
+    $("#tab_post_more_spinner").removeClass("hidden");
+  } else {
     $("#tab_post_spinner").removeClass("hidden");
     $("#tab_post_table").addClass("hidden");
+  } 
+
+  try {
 
     var author = data.acct_nm;
-    var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, null, '2100-01-01T00:00:00', 30);
+    var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, next, '2100-01-01T00:00:00', 20);
     
     const reqScotPayouts = [];
     for(item of result) {
       const reqScotPayout = fetch(`https://scot-api.steem-engine.com/@${item.author}/${item.permlink}`).then(r => r.json());
       reqScotPayouts.push(reqScotPayout);
     }
-    // console.log('reqScotPayouts', reqScotPayouts);
     const scotPayouts = await Promise.all(reqScotPayouts);
-    // console.log('scotPayouts', scotPayouts);
 
     for (var i = 0; i < result.length; i++) {
       const item = result[i];
@@ -1010,14 +990,23 @@ async function inqryPostInfo() {
       setContentMore(item);
       data.postList.push(item);
     }
-
-    $("#tab_post_spinner").addClass("hidden");
-    $("#tab_post_table").removeClass("hidden");
+    
   } catch (err) {
     console.error("inqryPostInfo", err);
   } finally {
-
+    if(next) {
+      $("#tab_post_more_spinner").addClass("hidden");
+    } else {
+      $("#tab_post_spinner").addClass("hidden");
+      $("#tab_post_table").removeClass("hidden");
+    }
   }
+}
+
+// 포스팅 리스트 더보기
+async function inqryPostMoreInfo() {
+  const next = data.postList[data.postList.length - 1].permlink;
+  await inqryPostInfo(next);
 }
 
 function parsePost(post) {
