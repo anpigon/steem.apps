@@ -300,7 +300,7 @@
                           class="payout__value" 
                           v-if="item.pending_payout_value !== '0.000 SBD'" 
                           data-toggle="tooltip" 
-                          v-bind:title="`Cashout: &#xa;${new Date(item.cashout_time + 'Z').toLocaleString()}`">$ {{item.payout_val}}</span>
+                          v-bind:title="item.payout_tooltip">$ {{item.payout_val}}</span>
                         <span 
                           class="payout__value" 
                           v-else data-toggle="tooltip" 
@@ -316,7 +316,7 @@
                                 v-if="scot.pending_token" 
                                 data-toggle="tooltip" 
                                 v-bind:title="scot.tooltip"
-                                __v-bind:title="`Cashout: &#xa;${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
+                                __v-bind:title="`Cashout: \n${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
                                 {{ (scot.pending_token) / Math.pow(10, scot.precision) }} 
                                 <span class='symbol'>{{ scot.token }}</span>
                               </span>
@@ -1008,6 +1008,15 @@ async function inqryPostInfo(next=null) {
       const item = result[i];
       const scotPayoutObject = scotPayouts[i];
       // console.log('scotPayoutObject', scotPayoutObject)
+
+      if(item.pending_payout_value !== '0.000 SBD') {
+        item.predict_payout_value = parseFloat(item.pending_payout_value);
+        item.predict_author_payout = item.predict_payout_value * 75 / 100;
+        item.predict_curation_payout = item.predict_payout_value * 25 / 100;
+        item.payout_tooltip = `Author: $ ${item.predict_author_payout.toFixed(5)}
+Curator: $ ${item.predict_curation_payout.toFixed(5)}
+\nPayout: ${new Date(item.cashout_time + 'Z').toLocaleString()}`;
+      }
 
       // scot 페이아웃 계산
       for(const symbol in scotPayoutObject) {
