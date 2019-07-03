@@ -296,17 +296,36 @@
                       <div>
                         <i class="text-warning glyphicon glyphicon-upload"></i> 
 
-                        <span class="payout__value" v-if="item.pending_payout_value !== '0.000 SBD'" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(item.cashout_time + 'Z').toLocaleString()}`">$ {{item.payout_val}}</span>
-                        <span class="payout__value" v-else data-toggle="tooltip" v-bind:title="`Author: ${item.total_payout_value}\nCurator: ${item.curator_payout_value}`">$ {{item.payout_val}}</span>
+                        <span 
+                          class="payout__value" 
+                          v-if="item.pending_payout_value !== '0.000 SBD'" 
+                          data-toggle="tooltip" 
+                          v-bind:title="`Cashout: &#xa;${new Date(item.cashout_time + 'Z').toLocaleString()}`">$ {{item.payout_val}}</span>
+                        <span 
+                          class="payout__value" 
+                          v-else data-toggle="tooltip" 
+                          v-bind:title="`Author: ${item.total_payout_value}\nCurator: ${item.curator_payout_value}`">$ {{item.payout_val}}</span>
 
                         <!-- 토큰 페이아웃 -->
                         <span v-if="item.scotPayout">
-                          <span v-for="(scot, i) in Object.values(item.scotPayout)" :key="`${scot}_${i}`">
-                              <span class="payout__value" v-if="scot.pending_token" data-toggle="tooltip" v-bind:title="`Cashout: &#xa;${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
-                                {{ (scot.pending_token) / Math.pow(10, scot.precision) }} <span class='symbol'>{{ scot.token }}</span>
+                          <span 
+                            v-for="(scot, i) in Object.values(item.scotPayout)" 
+                            :key="`${scot}_${i}`">
+                              <span 
+                                class="payout__value" 
+                                v-if="scot.pending_token" 
+                                data-toggle="tooltip" 
+                                v-bind:title="scot.tooltip"
+                                __v-bind:title="`Cashout: &#xa;${new Date(scot.cashout_time + 'Z').toLocaleString()}`">
+                                {{ (scot.pending_token) / Math.pow(10, scot.precision) }} 
+                                <span class='symbol'>{{ scot.token }}</span>
                               </span>
-                              <span class="payout__value" v-else data-toggle="tooltip" v-bind:title="`Author: ${((scot.total_payout_value) - scot.curator_payout_value - scot.beneficiaries_payout_value) / Math.pow(10, scot.precision)} ${scot.token}\nCurator: ${scot.curator_payout_value / Math.pow(10, scot.precision)} ${scot.token}\nBeneficiaries: ${scot.beneficiaries_payout_value / Math.pow(10, scot.precision)} ${scot.token}`">
-                                {{ (scot.total_payout_value) / Math.pow(10, scot.precision) }} <span class='symbol'>{{ scot.token }}</span>
+                              <span 
+                                class="payout__value" 
+                                v-else data-toggle="tooltip" 
+                                v-bind:title="`Author: ${((scot.total_payout_value) - scot.curator_payout_value - scot.beneficiaries_payout_value) / Math.pow(10, scot.precision)} ${scot.token}\nCurator: ${scot.curator_payout_value / Math.pow(10, scot.precision)} ${scot.token}\nBeneficiaries: ${scot.beneficiaries_payout_value / Math.pow(10, scot.precision)} ${scot.token}`">
+                                {{ (scot.total_payout_value) / Math.pow(10, scot.precision) }} 
+                                <span class='symbol'>{{ scot.token }}</span>
                               </span>
                           </span>
                         </span>
@@ -983,10 +1002,47 @@ async function inqryPostInfo(next=null) {
       reqScotPayouts.push(reqScotPayout);
     }
     const scotPayouts = await Promise.all(reqScotPayouts);
-
+    // console.log('scotPayouts', scotPayouts)
+    
     for (var i = 0; i < result.length; i++) {
       const item = result[i];
-      item.scotPayout = scotPayouts[i];
+      const scotPayoutObject = scotPayouts[i];
+      // console.log('scotPayoutObject', scotPayoutObject)
+
+      // scot 페이아웃 계산
+      for(const symbol in scotPayoutObject) {
+        // console.log('scot', scot)
+        const scot = scotPayoutObject[symbol]
+        const scotConfig = scot_config[symbol];
+        // console.log('scot_config', scot_config);
+        // {{ (scot.pending_token) / Math.pow(10, scot.precision) }} 
+
+        scot.author_reward_percentage = scotConfig.author_reward_percentage;
+        scot.beneficiaries_reward_percentage = scotConfig.beneficiaries_reward_percentage || 0;
+        scot.curation_reward_percentage = 100 - scot.author_reward_percentage - scot.beneficiaries_reward_percentage;
+        
+        // 예상 보상 금액 계산
+        if(scot.pending_token) {
+          scot.predict_payout = scot.pending_token / Math.pow(10, scot.precision);
+          scot.predict_author_payout = (scot.pending_token * scot.author_reward_percentage / 100) / Math.pow(10, scot.precision);
+          scot.predict_curation_payout = (scot.pending_token * scot.curation_reward_percentage / 100) / Math.pow(10, scot.precision);
+          if(scot.beneficiaries_reward_percentage) {
+            scot.predict_beneficiaries = (scot.pending_token * scot.beneficiaries_reward_percentage / 100) / Math.pow(10, scot.precision);
+          }
+          // 예상 보상금액: ${scot.predict_payout}
+          scot.tooltip = `Author: ${scot.predict_author_payout.toFixed(5)} ${symbol}         
+Curator: ${scot.predict_curation_payout.toFixed(5)} ${symbol}${scot.predict_beneficiaries?`\nBeneficiaries: ${scot.predict_beneficiaries.toFixed(5)} ${symbol}`:''}
+\nPayout: ${new Date(scot.cashout_time + 'Z').toLocaleString()}`;
+        }
+         // author_curve_exponent: 1.1
+        // author_reward_percentage: 38
+        // beneficiaries_reward_percentage: 5
+        // cashout_window_days: 5
+        // curation_curve_exponent: 1
+      }
+
+      console.log('scotPayoutObject', scotPayoutObject);
+      item.scotPayout = scotPayoutObject;
       setContentMore(item);
       data.postList.push(item);
     }
@@ -1573,4 +1629,14 @@ function getBusyVotingPower() {
     data.busy_msg = "현재 서비스가 원활하지 않습니다.잠시 후에 재시도 해주세요.";
   }
 }
+
+// scot_config
+let scot_config = {};
+$.get('https://scot-api.steem-engine.com/config').then(ret => {
+  for(item of ret) {
+    scot_config[item.token] = item;
+  }
+  console.log('scot_config', scot_config)
+});
+
 </script>
