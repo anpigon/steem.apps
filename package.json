@@ -8,7 +8,7 @@
   },
   "scripts": {
     "srart": "node server.js",
-    "dev": "./node_modules/.bin/nodemon --watch steem.apps erver.js",
+    "dev": "./node_modules/.bin/nodemon --watch steem.apps server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "./node_modules/.bin/gh-pages -d steem.apps"
   },
